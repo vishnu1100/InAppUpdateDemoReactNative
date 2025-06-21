@@ -69,21 +69,6 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass #Bypass Powershell as
 
 
 
-///// Clear cache and sesssion data /////////////
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
-
-useEffect(() => {
-  const clearStorage = async () => {
-    await AsyncStorage.clear();
-    console.log('AsyncStorage cleared!');
-  };
-
-  clearStorage();
-}, []);
-
-
 ///////////////////////////////////////////////////////
 
 
