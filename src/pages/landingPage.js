@@ -291,7 +291,7 @@ const LandingPage = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-      <Text style={{ color: 'white', fontSize: 16 }}>Welcome to version 1!</Text>
+      <Text style={{ color: 'white', fontSize: 16 }}>Welcome to version "1.0.0.1"!</Text>
       
       {currentVersion && (
         <Text style={{ color: 'white', fontSize: 14, marginTop: 10 }}>
