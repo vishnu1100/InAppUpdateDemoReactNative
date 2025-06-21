@@ -90,8 +90,8 @@ android {
         applicationId "com.inappupdatedemoreactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1"
+        versionCode 1.0
+        versionName "1.0"
     }
     signingConfigs {
         debug {
