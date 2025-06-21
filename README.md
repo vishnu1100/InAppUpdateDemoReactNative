@@ -1,55 +1,67 @@
-Create project ------- npx @react-native-community/cli init first App
+# InAppUpdateDemoReactNative
 
+This project is a demonstration of in-app updates in React Native.
 
-//////////////////////////////////////////////////////////////
+## Project Setup
 
+To create a new React Native project:
 
+```bash
+npx @react-native-community/cli init YourProjectName
+```
 
+## Development
 
+### Starting the Metro Bundler
+
+To start the Metro bundler and reset the cache:
+
+```bash
 npx react-native start --reset-cache
+```
 
+### Running the application
 
+To run the project on a specific platform:
 
-//////////////////////////////////////////////////////////////
+-   **Android:**
+    ```bash
+    npx react-native run-android
+    ```
+-   **iOS:**
+    ```bash
+    npx react-native run-ios
+    ```
 
-npx react-native start --reset-cache
-npx react-native run-android  # For Android
-npx react-native run-ios      # For iOS (if applicable)
+### Clean Gradle build
 
+To clean the Gradle build cache, navigate to the `android` directory and run:
 
-//////////////////////////////////////////////////////////////
-
-
+```bash
 gradlew clean
+```
 
-//////////////////////////////////////////////////////////////
+## Building the APK
 
+To build a release APK:
 
+1.  Navigate to the `android` directory:
+    ```bash
+    cd android
+    ```
+2.  Run the `assembleRelease` Gradle task:
+    ```bash
+    gradlew assembleRelease
+    ```
 
-Run Project -----  npx react-native run-android  or    npx react-native start
+### Generating separate APKs for different ABIs
 
-//////////////////////////////////////////////////////////////
+To generate separate APKs for different CPU architectures, add the following to your `/android/app/build.gradle` file:
 
-
-buid apk  --- cd /android ----  gradlew assembleRelease
-
-
-////////////////////////////////////////////////////////
-
-Create Local properties /android/local.properties
-
-sdk.dir=/Users/username/Library/Android/sdk  # macOS
-
-sdk.dir=C:\\Users\\username\\AppData\\Local\\Android\\Sdk  
-
-
-////////////////////////////////////////////////////////
-
-for deperate apk put /android/app/buid.gradle
-
- android{
-
-     splits {
+```groovy
+android {
+    // ...
+    splits {
         abi {
             enable true
             reset()
@@ -57,48 +69,67 @@ for deperate apk put /android/app/buid.gradle
             universalApk false
         }
     }
+    // ...
 }
+```
 
-////////////////////////////////////////////////////////
+## Environment Setup
 
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass #Bypass Powershell as admin
+### Android SDK Configuration
 
-///////////////////////////////////////////////////////
+Create a `local.properties` file in the `/android` directory with the path to your Android SDK:
 
+**/android/local.properties**
 
+```properties
+# For macOS
+# sdk.dir=/Users/username/Library/Android/sdk
 
+# For Windows
+sdk.dir=C:\\Users\\username\\AppData\\Local\\Android\\Sdk
+```
 
+### PowerShell Execution Policy
 
-///////////////////////////////////////////////////////
+To allow running scripts on PowerShell, you might need to bypass the execution policy (run as Administrator):
 
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
 
-///////////////////////////////////////////////////////
+### Wireless Debugging with ADB
 
+1.  **Get platform tools** and add them to your environment's `PATH`.
+2.  List connected devices:
+    ```bash
+    adb devices
+    ```
+3.  **Enable ADB over TCP/IP on the target device:**
+    ```bash
+    adb tcpip 5555
+    ```
+4.  **Connect to your device via its IP address:**
+    ```bash
+    adb connect 192.168.1.5:5555
+    ```
+5.  **Verify connection:**
+    ```bash
+    adb devices
+    ```
 
-Installation
-Get platform tools
+### Java Development Kit (JDK) Setup
 
-Add to env
+This project requires JDK 17.
 
-adb devices
+1.  **Install JDK 17.**
+2.  **Set `JAVA_HOME` environment variable:**
+    -   **Name:** `JAVA_HOME`
+    -   **Value:** `C:\path\to\your\jdk-17` (e.g., `C:\jdk-17.0.15+6`)
+3.  **Add JDK to your `Path` environment variable:**
+    -   Add `%JAVA_HOME%\bin` to your `Path`.
 
-adb tcpip 5555
+### Required Tools
 
-adb connect 192.168.1.5:5555
-
-adb devices
-
-Get JAVA 17
-
-add as system environment
-
-name = JAVA_HOME , value = C:\jdk-17.0.15+6
-
-Set path environment
-%JAVA_HOME%\bin
-
-Install Android Studio
-
-Set sdk location on android/local.properties
-
-sdk.dir=C:\Users\vishn\AppData\Local\Android\Sdk
+-   Android Studio
+-   Android Platform Tools (for `adb`)
+-   Java 17
