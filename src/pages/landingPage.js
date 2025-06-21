@@ -20,10 +20,22 @@ const LandingPage = () => {
   const [downloadProgress, setDownloadProgress] = useState(null);
   const [isChecking, setIsChecking] = useState(false);
   const [error, setError] = useState(null);
+  const [currentVersion, setCurrentVersion] = useState(null);
 
   useEffect(() => {
+    getCurrentVersion();
     checkForUpdate();
   }, []);
+
+  const getCurrentVersion = async () => {
+    try {
+      const version = DeviceInfo.getVersion();
+      const buildNumber = DeviceInfo.getBuildNumber();
+      setCurrentVersion({ version, buildNumber });
+    } catch (error) {
+      console.error('Failed to get version info:', error);
+    }
+  };
 
   const checkForUpdate = async () => {
     try {
@@ -41,14 +53,45 @@ const LandingPage = () => {
       console.log('Latest version info:', latest);
 
       const currentBuild = parseInt(DeviceInfo.getBuildNumber());
+      const currentVersion = DeviceInfo.getVersion();
       const latestBuild = parseInt(latest.build);
+      const latestVersion = latest.version || latest.versionName;
       
-      console.log(`Current build: ${currentBuild}, Latest build: ${latestBuild}`);
+      console.log(`Current: v${currentVersion} (${currentBuild}), Latest: v${latestVersion} (${latestBuild})`);
 
-      if (latestBuild > currentBuild) {
+      // Check if there's a newer version (either version name or build number)
+      let updateAvailable = false;
+      let updateReason = '';
+
+      if (latestVersion && currentVersion !== latestVersion) {
+        // Compare version names (e.g., "1.0" vs "1.1")
+        const currentVersionParts = currentVersion.split('.').map(Number);
+        const latestVersionParts = latestVersion.split('.').map(Number);
+        
+        for (let i = 0; i < Math.max(currentVersionParts.length, latestVersionParts.length); i++) {
+          const current = currentVersionParts[i] || 0;
+          const latest = latestVersionParts[i] || 0;
+          
+          if (latest > current) {
+            updateAvailable = true;
+            updateReason = `New version available: v${currentVersion} → v${latestVersion}`;
+            break;
+          } else if (latest < current) {
+            break;
+          }
+        }
+      }
+
+      // If version names are the same, check build numbers
+      if (!updateAvailable && latestBuild > currentBuild) {
+        updateAvailable = true;
+        updateReason = `New build available: ${currentBuild} → ${latestBuild}`;
+      }
+
+      if (updateAvailable) {
         Alert.alert(
           'Update Available', 
-          `New version available!\n\nCurrent: ${currentBuild}\nLatest: ${latestBuild}\n\n${latest.notes || 'Download now?'}`, 
+          `${updateReason}\n\n${latest.notes || 'Download now?'}`, 
           [
             { text: 'Later', style: 'cancel' },
             { text: 'Update', onPress: () => handleDownload(latest.apkUrl) },
@@ -56,6 +99,7 @@ const LandingPage = () => {
         );
       } else {
         console.log('App is up to date');
+        Alert.alert('Up to Date', 'You have the latest version installed.');
       }
     } catch (error) {
       console.error('Update check failed:', error);
@@ -174,6 +218,12 @@ const LandingPage = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
       <Text style={{ color: 'white', fontSize: 16 }}>Welcome to version 1!</Text>
+      
+      {currentVersion && (
+        <Text style={{ color: 'white', fontSize: 14, marginTop: 10 }}>
+          Version: {currentVersion.version} (Build {currentVersion.buildNumber})
+        </Text>
+      )}
       
       {isChecking && (
         <Text style={{ color: 'white', marginTop: 20 }}>
