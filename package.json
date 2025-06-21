@@ -10,9 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native/new-app-screen": "0.80.0",
     "react": "19.1.0",
     "react-native": "0.80.0",
-    "@react-native/new-app-screen": "0.80.0"
+    "react-native-device-info": "^14.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

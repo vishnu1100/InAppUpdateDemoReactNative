@@ -1,116 +1,46 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { Alert, Linking, Text, View } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
-export default function LandingPage() {
+const UPDATE_URL = 'https://raw.githubusercontent.com/<your-username>/<repo-name>/main/version.json';
+
+const LandingPage = () => {
+
+  useEffect(() => {
+    checkForUpdate();
+  }, []);
+
+  const checkForUpdate = async () => {
+    try {
+      const response = await fetch(UPDATE_URL);
+      const latest = await response.json();
+
+      const currentBuild = parseInt(DeviceInfo.getBuildNumber());
+      const latestBuild = parseInt(latest.build);
+
+      if (latestBuild > currentBuild) {
+        Alert.alert(
+          "Update Available",
+          latest.notes || "A new version is available. Update now?",
+          [
+            { text: "Later", style: "cancel" },
+            {
+              text: "Update",
+              onPress: () => Linking.openURL(latest.apkUrl)
+            }
+          ]
+        );
+      }
+    } catch (error) {
+      console.log("Update check failed:", error);
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.hero}>
-        <Image
-          source={{ uri: 'https://assets.withfra.me/Landing.3.png' }}
-          style={styles.heroImage}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={styles.content}>
-        <View style={styles.contentHeader}>
-          <Text style={styles.title}>
-            Plan your day{'\n'}with{' '}
-            <View style={styles.appName}>
-              <Text style={styles.appNameText}>MyApp</Text>
-            </View>
-          </Text>
-          <Text style={styles.text}>
-            Aliqua ullamco incididunt elit labore consequat ipsum sunt
-            exercitation aliqua duis nulla et qui fugiat
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            // handle onPress
-          }}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Let's go</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
+      <Text style ={{color: 'white'}} >Welcome to the App!</Text>
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '500',
-    color: '#281b52',
-    textAlign: 'center',
-    marginBottom: 12,
-    lineHeight: 40,
-  },
-  text: {
-    fontSize: 15,
-    lineHeight: 24,
-    fontWeight: '400',
-    color: '#9992a7',
-    textAlign: 'center',
-  },
-  /** Hero */
-  hero: {
-    backgroundColor: '#d8dffe',
-    margin: 12,
-    borderRadius: 16,
-    padding: 16,
-  },
-  heroImage: {
-    width: '100%',
-    height: 400,
-  },
-  /** Content */
-  content: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: 24,
-    paddingHorizontal: 24,
-  },
-  contentHeader: {
-    paddingHorizontal: 24,
-  },
-  appName: {
-    backgroundColor: '#fff2dd',
-    transform: [
-      {
-        rotate: '-5deg',
-      },
-    ],
-    paddingHorizontal: 6,
-  },
-  appNameText: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#281b52',
-  },
-  /** Button */
-  button: {
-    backgroundColor: '#56409e',
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-  },
-  buttonText: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: '#fff',
-  },
-});
+export default LandingPage;
