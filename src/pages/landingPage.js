@@ -38,7 +38,7 @@ const LandingPage = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'  }}>
-      <Text style ={{color: 'white'}} >Welcome to the App!</Text>
+      <Text style ={{color: 'white'}} >Welcome to the version 1 !</Text>
     </View>
   );
 };
