@@ -68,18 +68,6 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass #Bypass Powershell as
 
 
 
-///////////////////////////////////////////////////////
-
-Figma Link
-
-
-https://www.figma.com/design/4lLmcGAZzD0SG0UucAfCfB/LDESK-3.0?node-id=6-2063&p=f&t=OePhROTvGSQirOPT-0
-
-
-
-///////////////////////////////////////////////////////
-
-
 
 ///// Clear cache and sesssion data /////////////
 
